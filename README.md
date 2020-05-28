@@ -53,11 +53,14 @@
 
     ```js
     Group gEnergyMeter
-    Number  EnergyMeterPower "Power [%.2f Watt]" (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:power" }
-    Number  EnergyMeterVoltage "Voltage [%.2f Volt]" (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:voltage" }
-    Number  EnergyMeterCurrent "Current [%.2f Amp]" (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:current" }
-    Number  EnergyMeterEnergy "Energy [%.2f Kwh]" (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:energy" }
+    Number  EnergyMeterPower "Power [%.2f Watt]" <alarm> (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:power" }
+    Number  EnergyMeterVoltage "Voltage [%.2f Volt]" <poweroutlet_au>(gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:voltage" }
+    Number  EnergyMeterCurrent "Current [%.2f Amp]" <cistern> (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:current" }
+    Number  EnergyMeterEnergy "Energy [%.2f Kwh]" <energy> (gEnergyMeter)  { channel="mqtt:topic:localMosquitto:EnergyMeter:energy" }
     ```
+
+    > I have added icons which are available by default with OpenHAB, which donot justify the parameters. You can change that and add icons of your choice.
+     
     ### Add the items to a sitemap 
 
     > You can either add the items individually or add the group straight away to the sitemaps file.
@@ -75,7 +78,6 @@
         }
     }
     ```
-    You can add icons to the items also, by adding `<icon_name>` before group `(group_)`.
  
     ![](Images/sitemap.PNG)
 
