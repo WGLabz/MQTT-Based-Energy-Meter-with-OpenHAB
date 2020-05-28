@@ -35,10 +35,10 @@
     ```js
     Thing mqtt:topic:localMosquitto:EnergyMeter "Energy Meter" (mqtt:broker:localMosquitto)  {
         Channels:
-            Type number : power "Power" [ stateTopic="tele/worklight/STATE", transformationPattern="JSONPATH:$.POWER" ]
-            Type number : voltage "Voltage" [ stateTopic="tele/worklight/STATE", transformationPattern="JSONPATH:$.VOLT" ]
-            Type number : current "Current" [ stateTopic="tele/worklight/STATE", transformationPattern="JSONPATH:$.AMP" ]
-            Type number : energy "Energy" [ stateTopic="tele/worklight/STATE", transformationPattern="JSONPATH:$.ENERGY" ]
+            Type number : power "Power" [ stateTopic="home/energymeter/93/data", transformationPattern="JSONPATH:$.POWER" ]
+            Type number : voltage "Voltage" [ stateTopic="home/energymeter/93/data", transformationPattern="JSONPATH:$.VOLT" ]
+            Type number : current "Current" [ stateTopic="home/energymeter/93/data", transformationPattern="JSONPATH:$.AMP" ]
+            Type number : energy "Energy" [ stateTopic="home/energymeter/93/data", transformationPattern="JSONPATH:$.ENERGY" ]
     }
     ```
 
