@@ -1,5 +1,19 @@
 # MQTT Based Energy Meter with OpenHAB
 
+## Libraries Used:
+
+1. 
+2. [U8glib Library for OLED](https://github.com/olikraus/u8g2)
+3. [SoftwareSerial](https://github.com/plerup/espsoftwareserial)
+
+### ESP32 Pin Diagram:-
+
+![image](Images/TTGO%20ESP32%20LoRa%20Pinout.jpg)
+
+### Connection Diagram:-
+
+![image](Images/ConnectionDigram.png)
+
 
 ## Setting up with OpenHAB
 
