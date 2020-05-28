@@ -52,12 +52,38 @@
     Create a new file `energy_meter.items` and paste the following contents,
 
     ```js
-    Number  EnergyMeterPower "Power [%.2f Watt]" { channel="mqtt:topic:localMosquitto:EnergyMeter:power" }
-    Number  EnergyMeterVoltage "Voltage [%.2f Volt]" { channel="mqtt:topic:localMosquitto:EnergyMeter:voltage" }
-    Number  EnergyMeterCurrent "Current [%.2f Amp]" { channel="mqtt:topic:localMosquitto:EnergyMeter:current" }
-    Number  EnergyMeterEnergy "Energy [%.2f Kwh]" { channel="mqtt:topic:localMosquitto:EnergyMeter:energy" }
+    Group gEnergyMeter
+    Number  EnergyMeterPower "Power [%.2f Watt]" (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:power" }
+    Number  EnergyMeterVoltage "Voltage [%.2f Volt]" (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:voltage" }
+    Number  EnergyMeterCurrent "Current [%.2f Amp]" (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:current" }
+    Number  EnergyMeterEnergy "Energy [%.2f Kwh]" (gEnergyMeter) { channel="mqtt:topic:localMosquitto:EnergyMeter:energy" }
     ```
     ### Add the items to a sitemap 
+
+    > You can either add the items individually or add the group straight away to the sitemaps file.
+
+    Navigate to  `sitemaps` folder in your OpenHAB installation. For `OpenHabian` it is `/etc/openhab2/sitemaps`. Create a file `energy_meter.sitemap` and pasgte the following contents, 
+
+    ```js
+    sitemap test label="Energy Meters"
+    {	
+        Frame label="Mains Meter"{
+            Text item=EnergyMeterPower
+            Text item=EnergyMeterVoltage
+            Text item=EnergyMeterCurrent
+            Text item=EnergyMeterEnergy
+        }
+    }
+    ```
+    You can add icons to the items also, by adding `<icon_name>` before group `(group_)`.
+ 
+    ![](Images/sitemap.PNG)
+
+
+
+    Enjoy !!
+
+
 
     
 
