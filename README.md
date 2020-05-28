@@ -3,14 +3,14 @@
 
 ## Setting up with OpenHAB
 
-1. If MQTT addon is not installed,
+### If MQTT addon is not installed,
 
     Goto `OpenHAB Paper UI -> Ad-ons -> Bindings` and search for mqtt. Make sure to install the `2.x` listing of it.
         
     ![](Images/binding.PNG)
     
     
-2. Create required Things/Items
+### Create required Things/Items/Sitemap
 
     > There are 2 ways of creating the required things/items in OpenHAB, using the paper UI and through text files. Over here I am going to use the text files way, as this makes managing and backing up easy.
 
@@ -60,7 +60,7 @@
     ```
 
     > I have added icons which are available by default with OpenHAB, which donot justify the parameters. You can change that and add icons of your choice.
-     
+
     ### Add the items to a sitemap 
 
     > You can either add the items individually or add the group straight away to the sitemaps file.
