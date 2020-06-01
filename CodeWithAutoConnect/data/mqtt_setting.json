@@ -1,0 +1,73 @@
+{
+  "title": "MQTT Setting",
+  "uri": "/mqtt_setting",
+  "menu": true,
+  "element": [
+    {
+      "name": "style",
+      "type": "ACStyle",
+      "value": "label+input,label+select{position:sticky;left:120px;width:230px!important;box-sizing:border-box;}"
+    },
+    {
+      "name": "header",
+      "type": "ACText",
+      "value": "<h2>MQTT broker settings</h2>",
+      "style": "text-align:center;color:#2f4f4f;"
+    },
+    {
+      "name": "caption",
+      "type": "ACText",
+      "value": "Publishing the WiFi signal strength to MQTT channel. RSSI value of ESP8266 to the channel created on ThingSpeak",
+      "style": "font-family:serif;color:#4682b4;"
+    }, {
+      "name": "mqtt_broker_url",
+      "type": "ACInput",
+      "value": "192.168.0.7",
+      "placeholder": "Broker IP",
+      "label": "Broker IP"
+    },
+    {
+      "name": "mqtt_broker_port",
+      "type": "ACInput",
+      "value": "1883",
+      "placeholder": "Port",
+      "label": "Port"
+    },
+    {
+      "name": "mqtt_username",
+      "type": "ACInput",
+      "value": "admin",
+      "label": "Username"
+    },
+    {
+      "name": "mqtt_password",
+      "type": "ACInput",
+      "value": "password",
+      "label": "Password"
+    },
+    {
+      "name": "mqtt_topic",
+      "type": "ACInput",
+      "value": "home/energy_meter/data",
+      "label": "MQTT Topic"
+    },
+    {
+      "name": "update_interval",
+      "type": "ACInput",
+      "value": "60",
+      "label": "Update Interval (In Seconds)"
+    },
+    {
+      "name": "save",
+      "type": "ACSubmit",
+      "value": "Save&Start",
+      "uri": "/mqtt_save"
+    },
+    {
+      "name": "discard",
+      "type": "ACSubmit",
+      "value": "Discard",
+      "uri": "/"
+    }
+  ]
+}

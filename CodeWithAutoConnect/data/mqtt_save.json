@@ -1,0 +1,13 @@
+{
+  "title": "MQTT Setting",
+  "uri": "/mqtt_save",
+  "menu": false,
+  "element": [
+    {
+      "name": "caption",
+      "type": "ACText",
+      "value": "<h4>MQTT Configuration saved !!</h4>",
+      "style": "text-align:center;color:#2f4f4f;padding:10px;"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+[
+  {
+    "name": "mqtt_broker_url",
+    "type": "ACInput",
+    "value": "192.168.0.7",
+    "placeholder": "Broker URL",
+    "label": "Broker URL"
+  },
+  {
+    "name": "mqtt_broker_port",
+    "type": "ACInput",
+    "value": "1883",
+    "placeholder": "Port",
+    "label": "Port"
+  },
+  {
+    "name": "mqtt_username",
+    "type": "ACInput",
+    "value": "admin",
+    "label": "Username"
+  },
+  {
+    "name": "mqtt_password",
+    "type": "ACInput",
+    "value": "password",
+    "label": "Password"
+  },
+  {
+    "name": "mqtt_topic",
+    "type": "ACInput",
+    "value": "home/energy_meter/data",
+    "label": "MQTT Topic"
+  },
+  {
+    "name": "update_interval",
+    "type": "ACInput",
+    "value": "60",
+    "label": "Update Interval"
+  }
+]
