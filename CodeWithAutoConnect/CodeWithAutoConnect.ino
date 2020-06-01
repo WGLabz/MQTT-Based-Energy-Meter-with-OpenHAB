@@ -177,16 +177,16 @@ void setup() {
     PageArgument  args;
     AutoConnectAux& mqtt_setting = *setting;
     loadParams(mqtt_setting, args);
-    AutoConnectCheckbox&  uniqueidElm = mqtt_setting["uniqueid"].as<AutoConnectCheckbox>();
-    AutoConnectInput&     hostnameElm = mqtt_setting["hostname"].as<AutoConnectInput>();
-    if (uniqueidElm.checked) {
-      config.apid = String("ESP") + "-" + String(GET_CHIPID(), HEX);
-      Serial.println("apid set to " + config.apid);
-    }
-    if (hostnameElm.value.length()) {
-      config.hostName = hostnameElm.value;
-      Serial.println("hostname set to " + config.hostName);
-    }
+//    AutoConnectCheckbox&  uniqueidElm = mqtt_setting["uniqueid"].as<AutoConnectCheckbox>();
+//    AutoConnectInput&     hostnameElm = mqtt_setting["hostname"].as<AutoConnectInput>();
+//    if (uniqueidElm.checked) {
+//      config.apid = String("ESP") + "-" + String(GET_CHIPID(), HEX);
+//      Serial.println("apid set to " + config.apid);
+//    }
+//    if (hostnameElm.value.length()) {
+//      config.hostName = hostnameElm.value;
+//      Serial.println("hostname set to " + config.hostName);
+//    }
     config.homeUri = "/";
     portal.config(config);
 
