@@ -26,22 +26,15 @@ typedef WebServer WiFiWebServer;
 #endif
 
 #define MQTT_USER_ID "no_one"
+
 AutoConnect  portal;
 AutoConnectConfig config;
 WiFiClient   wifiClient;
 PubSubClient mqttClient(wifiClient);
-String  serverName;
-String  channelId;
-String  userKey;
-String  apiKey;
-String  apid;
-String  hostName;
-unsigned int  updateInterval = 0;
-unsigned long lastPub = 0;
+int lastDataPublishTime = 0;
 
-// JSON Document variables for Energhy Data
+// JSON Document variables for Energy Data
 StaticJsonDocument<100> energyDataJsonObject;
-String energyDataString;
 
 // MQTT Configuration parameters
 String clientId = "ARandom_client_id_with_123";
@@ -56,17 +49,16 @@ int mqttDataPublishInterval;
  
 // Connect to the MQTT broker
 bool mqttConnect() {
-  char    clientId[9];
   uint8_t retry = 3;
   while (!mqttClient.connected()) {
     
-    if (serverName.length() <= 0)
+    if (mqttBrokerIP.length() <= 0)
       break;
 
-    mqttClient.setServer(serverName.c_str(),mqttBrokerPort.toInt());
-    Serial.println(String("Attempting MQTT broker connection:") + serverName);
+    mqttClient.setServer(mqttBrokerIP.c_str(),mqttBrokerPort.toInt());
+    Serial.println(String("Attempting MQTT broker connection:") + mqttBrokerIP);
     
-    if (mqttClient.connect(clientId, MQTT_USER_ID, userKey.c_str())) {
+    if (mqttClient.connect(clientId.c_str(), mqttUsername.c_str(), mqttPassword.c_str())) {
       Serial.println("Connection to MQTT broker established:" + String(clientId));
       return true;
     } else {
@@ -81,6 +73,7 @@ bool mqttConnect() {
 
 // Publish the Energy Data
 void mqttPublish() {
+  String energyDataString;
   serializeJson(energyDataJsonObject, energyDataString);
   mqttClient.publish(mqttDataPublishTopic.c_str() ,energyDataString.c_str());
 }
@@ -161,33 +154,33 @@ bool loadAux(const String auxName) {
   return rc;
 }
 
-void setup() {
-  delay(1000);
-  Serial.begin(115200);
-  Serial.println();
-  SPIFFS.begin();
+// Load MQTT Settings
 
-  loadAux(AUX_MQTTSETTING);
-  loadAux(AUX_MQTTSAVE);
-
-  AutoConnectAux* setting = portal.aux(AUX_MQTTSETTING);
-  if (setting) {
+void loadMQTTSettings(){
+   AutoConnectAux* setting = portal.aux(AUX_MQTTSETTING);
+   if (setting) {
     PageArgument  args;
     AutoConnectAux& mqtt_setting = *setting;
     loadParams(mqtt_setting, args);
-//    AutoConnectCheckbox&  uniqueidElm = mqtt_setting["uniqueid"].as<AutoConnectCheckbox>();
+    
     AutoConnectInput& brokerIpElement = mqtt_setting["mqtt_broker_url"].as<AutoConnectInput>();
     mqttBrokerIP = brokerIpElement.value;
-    Serial.print("MQTT Broker IP: ");
-    Serial.println(mqttBrokerIP);
-//    if (uniqueidElm.checked) {
-//      config.apid = String("ESP") + "-" + String(GET_CHIPID(), HEX);
-//      Serial.println("apid set to " + config.apid);
-//    }
-//    if (hostnameElm.value.length()) {
-//      config.hostName = hostnameElm.value;
-//      Serial.println("hostname set to " + config.hostName);
-//    }
+
+    AutoConnectInput& brokerPortElement = mqtt_setting["mqtt_broker_port"].as<AutoConnectInput>();
+    mqttBrokerPort = brokerPortElement.value;
+
+    AutoConnectInput& brokerUsernameElement = mqtt_setting["mqtt_username"].as<AutoConnectInput>();
+    mqttUsername = brokerUsernameElement.value;
+
+    AutoConnectInput& brokerPasswordElement = mqtt_setting["mqtt_password"].as<AutoConnectInput>();
+    mqttPassword = brokerPasswordElement.value;
+
+    AutoConnectInput& mqttTopicElement = mqtt_setting["mqtt_topic"].as<AutoConnectInput>();
+    mqttDataPublishTopic = mqttTopicElement.value;
+
+    AutoConnectInput& publishIntervalElement = mqtt_setting["update_interval"].as<AutoConnectInput>();
+    mqttDataPublishInterval = publishIntervalElement.value.toInt() * 1000 ;
+
     config.homeUri = "/";
     portal.config(config);
 
@@ -197,6 +190,18 @@ void setup() {
   else
     Serial.println("aux. load error");
 
+}
+void setup() {
+  delay(1000);
+  Serial.begin(115200);
+  Serial.println();
+  SPIFFS.begin();
+
+  loadAux(AUX_MQTTSETTING);
+  loadAux(AUX_MQTTSAVE);
+
+  loadMQTTSettings();
+  
   Serial.print("WiFi ");
   if (portal.begin()) {
     config.bootUri = AC_ONBOOTURI_HOME;
@@ -217,15 +222,26 @@ void setup() {
 
 void loop() {
   portal.handleClient();
-  if (updateInterval > 0) {
-    if (millis() - lastPub > updateInterval) {
+  mqttClient.loop();
+  if (mqttDataPublishInterval > 0) {
+    if ( (millis() - lastDataPublishTime) > mqttDataPublishInterval) {
+      updateMeterData();
       if (!mqttClient.connected()) {
         mqttConnect();
       }
-//      String item = String("field1=") + String(getStrength(7));
       mqttPublish();
-      mqttClient.loop();
-      lastPub = millis();
+      lastDataPublishTime = millis();
     }
   }
+}
+
+// Fetch meter data through UART interface ()
+void updateMeterData(){
+  Serial.print(" Updating meter data !!");
+  serializeJsonPretty(energyDataJsonObject, Serial);
+  energyDataJsonObject.clear();
+  energyDataJsonObject["POWER"] = 4;
+  energyDataJsonObject["VOLT"] = 230;
+  energyDataJsonObject["AMP"] = 7.1;
+  energyDataJsonObject["ENERGY"] = 0.1;
 }

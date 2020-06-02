@@ -22,7 +22,7 @@
     }, {
       "name": "mqtt_broker_url",
       "type": "ACInput",
-      "value": "192.168.0.7",
+      "value": "",
       "placeholder": "Broker IP",
       "label": "Broker IP"
     },

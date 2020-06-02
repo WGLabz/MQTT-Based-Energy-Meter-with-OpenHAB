@@ -2,7 +2,9 @@
 
 ## Libraries Used:
 
-1. 
+1. [ArduinoJSON](https://github.com/bblanchon/ArduinoJson)
+2. [Autoconnect](https://github.com/Hieromon/AutoConnect)
+3. [PageBuilder](https://github.com/Hieromon/PageBuilder)
 2. [U8glib Library for OLED](https://github.com/olikraus/u8g2)
 3. [SoftwareSerial](https://github.com/plerup/espsoftwareserial)
 
