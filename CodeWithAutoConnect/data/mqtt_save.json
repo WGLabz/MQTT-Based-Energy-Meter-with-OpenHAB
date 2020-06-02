@@ -4,6 +4,10 @@
   "menu": false,
   "element": [
     {
+      "name": "parameters",
+      "type": "ACText"
+    },
+    {
       "name": "caption",
       "type": "ACText",
       "value": "<h4>MQTT Configuration saved !!</h4>",

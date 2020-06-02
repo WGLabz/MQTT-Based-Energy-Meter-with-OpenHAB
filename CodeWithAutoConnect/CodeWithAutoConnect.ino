@@ -25,6 +25,7 @@ typedef ESP8266WebServer  WiFiWebServer;
 typedef WebServer WiFiWebServer;
 #endif
 
+#define MQTT_USER_ID "no_one"
 AutoConnect  portal;
 AutoConnectConfig config;
 WiFiClient   wifiClient;
@@ -37,9 +38,6 @@ String  apid;
 String  hostName;
 unsigned int  updateInterval = 0;
 unsigned long lastPub = 0;
-
-#define MQTT_USER_ID  "anyone"
-
 
 // JSON Document variables for Energhy Data
 StaticJsonDocument<100> energyDataJsonObject;
@@ -108,16 +106,16 @@ String saveParams(AutoConnectAux& aux, PageArgument& args) {
   portal.aux("/mqtt_setting")->saveElement(param, { "mqtt_broker_url", "mqtt_broker_port", "mqtt_username", "mqtt_password", "mqtt_topic", "update_interval"});
   param.close();
 
-  // Echo back saved parameters to AutoConnectAux page.
+//   Echo back saved parameters to AutoConnectAux page.
   AutoConnectText&  echo = aux["parameters"].as<AutoConnectText>();
-  echo.value = "Broker IP: " + mqttBrokerIP + "<br>";
+  echo.value ="Broker IP: " + mqttBrokerIP + "<br>";
   echo.value += "Port: " + mqttBrokerPort + "<br>";
   echo.value += "Username: " + mqttUsername + "<br>";
   echo.value += "Password: " + mqttPassword + "<br>";
   echo.value += "MQTT Topic: " +mqttDataPublishTopic + "<br>";
   echo.value += "Update Interval (In Seconds): "+ String(mqttDataPublishInterval / 1000) + " sec.<br>";
 
-  return String("");
+ return String("");
 }
 
 String loadParams(AutoConnectAux& aux, PageArgument& args) {
@@ -178,7 +176,10 @@ void setup() {
     AutoConnectAux& mqtt_setting = *setting;
     loadParams(mqtt_setting, args);
 //    AutoConnectCheckbox&  uniqueidElm = mqtt_setting["uniqueid"].as<AutoConnectCheckbox>();
-//    AutoConnectInput&     hostnameElm = mqtt_setting["hostname"].as<AutoConnectInput>();
+    AutoConnectInput& brokerIpElement = mqtt_setting["mqtt_broker_url"].as<AutoConnectInput>();
+    mqttBrokerIP = brokerIpElement.value;
+    Serial.print("MQTT Broker IP: ");
+    Serial.println(mqttBrokerIP);
 //    if (uniqueidElm.checked) {
 //      config.apid = String("ESP") + "-" + String(GET_CHIPID(), HEX);
 //      Serial.println("apid set to " + config.apid);
