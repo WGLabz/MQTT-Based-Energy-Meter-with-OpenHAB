@@ -15,11 +15,6 @@
       "style": "text-align:center;color:#2f4f4f;"
     },
     {
-      "name": "caption",
-      "type": "ACText",
-      "value": "Publishing the WiFi signal strength to MQTT channel. RSSI value of ESP8266 to the channel created on ThingSpeak",
-      "style": "font-family:serif;color:#4682b4;"
-    }, {
       "name": "mqtt_broker_url",
       "type": "ACInput",
       "value": "",

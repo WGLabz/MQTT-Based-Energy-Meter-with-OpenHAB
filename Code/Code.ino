@@ -29,7 +29,7 @@ typedef WebServer WiFiWebServer;
 
 #define MQTT_USER_ID "no_one"
 
-#define DEBUG true
+#define DEBUG false
 
 // SoftwareSerial Pins, used to connect the PZEM module
 int softRxPin = 13;
@@ -60,7 +60,7 @@ uint8_t voltage_[7] = {0xB0, 0xC0, 0xA8, 0x01, 0x01, 0x00, 0x1A};
 uint8_t power_[7] =   {0xB2, 0xC0, 0xA8, 0x01, 0x01, 0x00, 0x1C};
 
 //Timing Intervals
-int displayUpdateInterval = 60; // In seconds
+int displayUpdateInterval = 120; // In seconds
 int lastDisplayUpdateTime = 0;
 
 AutoConnect  portal;
@@ -257,13 +257,14 @@ void setup() {
   //  webServer.on(AUX_MQTTCLEAR, handleClearChannel);
   //Intialize the OLED module
   initializeOLED();
-  setMessageOnOLED("Starting....");
+  String ip_ = WiFi.localIP().toString();
+  char c[30];
+  ip_.toCharArray(c, sizeof(c));
+  setMessageOnOLED(c);
 
 }
 
 void loop() {
-  portal.handleClient();
-  mqttClient.loop();
   if (mqttDataPublishInterval > 0) {
     if ( (millis() - lastDataPublishTime) > mqttDataPublishInterval) {
       updateMeterData();
@@ -276,12 +277,14 @@ void loop() {
   }
   if ((millis() - lastDisplayUpdateTime) > (displayUpdateInterval * 1000)) {
     lastDisplayUpdateTime = millis();
-    updateMeterData();
     display_.drawString(8, 2, (String(voltage) + "V").c_str ());
     display_.drawString(8, 3, (String(current) + "A").c_str ());
     display_.drawString(8, 4, (String(power) + "W").c_str ());
     display_.drawString(8, 5, (String(energy) + "Kwh").c_str ());
   }
+  portal.handleClient();
+  mqttClient.loop();
+  Serial.println(mqttClient.connected());
 }
 
 void initializeOLED() {
@@ -326,8 +329,18 @@ bool updateMeterData() {
   if (DEBUG)
     printPzemResponseBuffer();
   energy = fetchData(energy_) ? ((uint32_t)pzem_response_buffer[1] << 16) + ((uint16_t)pzem_response_buffer[2] << 8) + pzem_response_buffer[3] : -1;
+  
   if (DEBUG)
     printPzemResponseBuffer();
+    
+  energyDataJsonObject.clear();
+  energyDataJsonObject["POWER"] = power;
+  energyDataJsonObject["VOLT"] = voltage;
+  energyDataJsonObject["AMP"] = current;
+  energyDataJsonObject["ENERGY"] = energy;
+  
+  if (DEBUG)
+    serializeJsonPretty(energyDataJsonObject, Serial);
 }
 bool fetchData(uint8_t *command) {
   while (pzemSerialObj.available() > 0) { //Empty in buffer if it holds any data

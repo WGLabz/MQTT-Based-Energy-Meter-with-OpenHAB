@@ -1,4 +1,7 @@
 # MQTT Based Energy Meter with OpenHAB
+### Overall Architecture:
+
+![architecture image](Images/Architecture.jpg)
 
 ## Libraries Used:
 
